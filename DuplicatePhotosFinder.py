@@ -83,9 +83,9 @@ def run() -> None:
     showMessage(f'Searching duplicate photos in directory {args.directory}.')
     
     regexFilter = re.compile(PHOTOS_REGEX_FILTER)
-    spinner = utils.ProgressSpinner('')
+    spinner = utils.ProgressSpinner('Processing files ')
 
-    duplicates = utils.duplicates.findDuplicatesInDirectory(args.directory, True, regexFilter, spinner)
+    duplicates = utils.duplicates.findDuplicatesInDirectory(args.directory, True, regexFilter, lambda: spinner.update())
     
     duplicateCount = sum([len(items) for items in duplicates])
     spinner.finish()

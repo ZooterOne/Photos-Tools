@@ -2,11 +2,11 @@ import re
 
 import utils
 
-from typing import Dict, List
+from typing import Dict, List, Callable
 
 
 def generateDirectoryChecksums(directoryPath: str, recursive: bool,
-                               regexFilter: re.Pattern[str], spinner: utils.ProgressSpinner) -> Dict[str, List[str]]:
+                               regexFilter: re.Pattern[str], progressCallback: Callable[[], None]) -> Dict[str, List[str]]:
     '''Generate the checksum for each file in a given directory.'''
     checksums: dict[str, list[str]] = {}
 
@@ -17,7 +17,7 @@ def generateDirectoryChecksums(directoryPath: str, recursive: bool,
             if (checksum not in checksums):
                 checksums[checksum] = []
             checksums[checksum].append(filePath)
-        spinner.update()
+        progressCallback()
 
     utils.files.parseFilesInDirectory(directoryPath, recursive, fileCallback)
     return checksums
@@ -54,23 +54,21 @@ def generateDuplicatesFromDirectoryChecksums(directoryChecksums: Dict[str, List[
 
 
 def findDuplicatesInDirectory(directoryPath: str, recursive: bool,
-                              regexFilter: re.Pattern[str], spinner: utils.ProgressSpinner) -> List[List[str]]:
+                              regexFilter: re.Pattern[str], progressCallback: Callable[[], None]) -> List[List[str]]:
     '''Find duplicate files in a given directory.'''
-    spinner.message = 'Processing files '
-    checksums = generateDirectoryChecksums(directoryPath, recursive, regexFilter, spinner)
+    checksums = generateDirectoryChecksums(directoryPath, recursive, regexFilter, progressCallback)
     return generateDuplicatesFromDirectoryChecksums(checksums)
 
 
 def findDuplicatesInDirectories(recursive: bool, regexFilter: re.Pattern[str],
-                               spinner: utils.ProgressSpinner, *directoryPaths: str) -> List[List[str]]:
+                               progressCallback: Callable[[], None], *directoryPaths: str) -> List[List[str]]:
     '''Find duplicate files in multiple given directories.'''
     directoryCount = len(directoryPaths)
     if directoryCount == 0:
         return []
-    spinner.message = 'Processing files '
     directoryIter = iter(directoryPaths)
-    mergedChecksums = generateDirectoryChecksums(next(directoryIter), recursive, regexFilter, spinner)
+    mergedChecksums = generateDirectoryChecksums(next(directoryIter), recursive, regexFilter, progressCallback)
     for directoryPath in directoryIter:
-        additionalChecksums = generateDirectoryChecksums(directoryPath, recursive, regexFilter, spinner)
+        additionalChecksums = generateDirectoryChecksums(directoryPath, recursive, regexFilter, progressCallback)
         mergedChecksums = mergeDirectoryChecksums(mergedChecksums, additionalChecksums)
     return generateDuplicatesFromDirectoryChecksums(mergedChecksums)

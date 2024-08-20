@@ -19,8 +19,8 @@ class TestFiles(unittest.TestCase):
         def countFile(_):
             nonlocal fileCount
             fileCount += 1
-        files.parseFilesInDirectory('./', False, countFile)
-        self.assertEqual(fileCount, 5)
+        files.parseFilesInDirectory('tests/assets', False, countFile)
+        self.assertEqual(fileCount, 4)
 
     def testParsePngInDirectoryRecursive(self) -> None:
         pngInDirectory = ['./tests/assets/one.png', './tests/assets/two.png', 
