@@ -7,6 +7,7 @@
 ## 🤔 About
 
 Various tools to manage photos.
+Supported photo formats are PNG, JPG and HEIC.
 
 ### 🔹DuplicatePhotosFinder
 
@@ -19,6 +20,24 @@ DuplicatePhotosFinder [--directory <directory>] [--output <filename>.csv]
 &nbsp;&nbsp;&nbsp;&nbsp;_directory: The path of the directory to process._
 
 &nbsp;&nbsp;&nbsp;&nbsp;_output: The path of the output csv file to generate._
+
+### 🔹SortPhotos
+
+Sort photos into folders named using date and location from photo Exif data.
+
+```
+SortPhotos [-directory <directory>] [-output <output>] [--location] [--undefined <name>] [--copy]
+```
+
+&nbsp;&nbsp;&nbsp;&nbsp;_directory: The path of the directory to process._
+
+&nbsp;&nbsp;&nbsp;&nbsp;_output: The path of the directory to copy or move sorted photo into._
+
+&nbsp;&nbsp;&nbsp;&nbsp;_location: Use location in addition to date to name folders._
+
+&nbsp;&nbsp;&nbsp;&nbsp;_undefined: The folder name to use when Exif data cannot be retrieved. Modification date will be used in such case._
+
+&nbsp;&nbsp;&nbsp;&nbsp;_copy: Copy the photos instead of moving them._
 
 ## 📝 Implementation
 
@@ -52,3 +71,9 @@ DuplicatePhotosFinder [--directory <directory>] [--output <filename>.csv]
  ``` bash
  python -m unittest -v
  ```
+
+ ## 💡 Future developments
+
+ - Use perceptual hash algorithm to detect duplicate photos.
+ - Add UI to DuplicatePhotoFinder.
+ - Develop a tool using Segment Anything Model.

@@ -9,11 +9,8 @@ import utils
 from typing import List
 
 
-# Regex matching photos filename
-PHOTOS_REGEX_FILTER = r"\.(([jJ][pP][eE]?[gG])|([pP][nN][gG])|([hH][eE][iI][cC]))$"
-
-
 def parseArgs() -> argparse.Namespace:
+    '''Parse command line arguments.'''
     parser = argparse.ArgumentParser(prog='DuplicatePhotosFinder', 
                                      description='Find & report duplicate photos.',
                                      formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -82,7 +79,7 @@ def run() -> None:
         utils.setupBasicLogging(debugPath[0] + '.log', 'DEBUG')
     showMessage(f'Searching duplicate photos in directory {args.directory}.')
     
-    regexFilter = re.compile(PHOTOS_REGEX_FILTER)
+    regexFilter = re.compile(utils.PHOTOS_REGEX_FILTER)
     spinner = utils.ProgressSpinner('Processing files ')
 
     duplicates = utils.duplicates.findDuplicatesInDirectory(args.directory, True, regexFilter, lambda: spinner.update())
